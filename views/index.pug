@@ -1,0 +1,28 @@
+extends default
+
+block content
+  div.container
+    .alert.alert-success.d-none(role='alert')
+      span.alert-text
+        | 
+      button.close(type='button',data-dismiss="alert", aria-label="Close")
+    .alert.alert-danger.d-none(role='alert')
+        span.alert-text 
+          | 
+        button.close(type='button',data-dismiss="alert", aria-label="Close")
+          
+    .alert.alert-warning.d-none(role='alert')
+        span.alert-text 
+          | 
+        button.close(type='button',data-dismiss="alert", aria-label="Close")
+          
+    form(onsubmit='getStore(this);return false;')
+        .form-group
+            label(for='inputAddress') Enter Address
+            input#inputAddress.form-control(type='text', aria-describedby='addressHelp', placeholder='Enter Address')
+            small#addressHelp.form-text.text-muted We'll return the delivery area in your vicinity.
+        button.btn.btn-primary.submit-btn(type='button', onclick='getStore(this)')
+          | Submit
+    .card.d-none.mt-2
+      .card-title
+      p.px-2 | 

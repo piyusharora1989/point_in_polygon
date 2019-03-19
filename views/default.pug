@@ -1,0 +1,69 @@
+doctype html
+html
+  head
+    title #{title}
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+    script(src="http://code.jquery.com/jquery-3.3.1.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    script.
+        function getStore(context){
+            
+            let address = document.getElementById('inputAddress').value;
+
+            // Take no action if address is empty
+            if(!address.trim())
+                return false;
+            let httpRequest = new XMLHttpRequest();
+            
+            httpRequest.open('POST', '/check-store-in-area',true);
+            httpRequest.setRequestHeader('Content-Type', 'application/json');
+            let addressJSON = JSON.stringify({"address":address});
+            httpRequest.send(addressJSON);
+            document.querySelector('.submit-btn').disabled = true;
+            document.querySelector('.submit-btn').textContent = 'Loading...';
+            httpRequest.onreadystatechange = function(){
+
+                // Process the server response here.
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+
+                    /**
+                     * Disable submit button while ajax request is in progress
+                     */
+                    document.querySelector('.submit-btn').disabled = false;
+                    document.querySelector('.submit-btn').textContent = 'Submit';
+                    let resp = {};
+                    resp =JSON.parse(httpRequest.responseText);
+                    if (httpRequest.status === 200) {
+                        
+                        /**
+                         * if message is there, then response does not contain the information, but error
+                         * If message is not there but name is there, then we got the success response.
+                         */
+                         
+                        if(resp.message){
+                            document.querySelector('.alert-warning span.alert-text').innerText = resp.message;
+                            $('.alert').addClass('d-none');
+                            document.querySelector('.alert-warning').classList.remove('d-none');
+                            document.querySelector('.card.mt-2').classList.add('d-none');
+                        } else {
+                            $('.alert').addClass('d-none');
+                            document.querySelector('.card.mt-2').classList.remove('d-none');
+                            document.querySelector('.card.mt-2 p').innerHTML = 'The outlet identifier for the entered address is: <b>'+ resp.name + '</b>';
+                        }
+                    } else {
+                        resp.message = resp.message? resp.message:"Something unexpected happened!";
+                        document.querySelector('.alert-danger span.alert-text').innerText = resp.message;
+                        $('.alert').addClass('d-none');
+                        document.querySelector('.alert-danger').classList.remove('d-none')
+                    }
+                }
+            }
+        }
+  body
+    main
+      block header
+        header.header
+          h1 #{title}
+      block content

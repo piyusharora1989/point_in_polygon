@@ -1,0 +1,17 @@
+{
+  "name": "googlepolygon",
+  "version": "1.0.0",
+  "description": "Application for finding if address falls in polygon",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Piyush Arora",
+  "license": "ISC",
+  "dependencies": {
+    "@google/maps": "^0.5.5",
+    "d3-geo": "^1.11.3",
+    "express": "^4.16.4",
+    "pug": "^2.0.3"
+  }
+}
